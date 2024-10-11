@@ -1,44 +1,39 @@
-import {React,useState} from 'react'
+import {React, useState} from 'react'
 import Header from './componentes/header';
 import ComentarioItem from './componentes/ComentarioItem';
-import comentarios from './data/Comentarios';
+import Comentarios from './data/Comentarios';
+import ComentarioLista from './componentes/ComentarioLista';
+import Card from './componentes/Card';
+import ComentarioStats from './componentes/ComentarioStats';
+import ComentarioForm from './componentes/ComentarioForm.jsx';
+
 function App() {
 
+    const [comments, setComments] = useState(Comentarios)
 
-    const[comments,
-        setComments] = useState(comentarios)
-
+    const borrarItem= (id) =>{
+      if(  window.confirm('¿Estas seguro que quieres borrar el comentario?')){
+        //asignar nuevo estado a comments
+        //filter:para quitar los comentarios
+        //cuyo id concuerde con el parametro id
+        setComments(comments.filter((c)=> c.id !== id))     
+      }
+      
+    }
     const titulo = "App de Comentarios";
-    const Autor = "Cristian Castiblanco";
-    const ficha = 2902093;
-    const centro= "CGMLTI";
-    
-
+    const Autor = "David Giron y Jose"
+    const ficha = "2902093"
+    const centro = "CGMLTI"
     const loading = false;
-    const showComments = true;
-    if(loading === true ) return (<h1>Cargando comentarios</h1>)
+    if (loading === true) return (<h1> Cargando comentarios.. </h1>)        
+    
   return (
     <div className='container'>
-        
-        <Header titulo={titulo} autor={Autor} ficha={ficha} centro={centro} />
-        
-    {showComments && 
-    (
-        <div classname='comments'>
-        <h3>Comentarios: {comentarios.length }</h3>
-        <ul>
-            {
-                comments.map(comentario => 
-                    <ComentarioItem 
-                          key={comentario.id}
-                          comentario={comentario.comentario}
-                          calificacion={comentario.calificacion} 
-                          />
-                )
-            }
-        </ul>
-    </div>
-    ) }
+
+        <Header titulo={titulo} autor={Autor} centro={centro} ficha={ficha}/>
+        <ComentarioForm/>
+        <ComentarioStats comentarios={comments}/>
+        <ComentarioLista comments={comments} handleDelete={borrarItem} />
     </div>
   )
 }
